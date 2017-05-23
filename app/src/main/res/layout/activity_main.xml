@@ -35,12 +35,33 @@
             android:hint="Body"
             android:lines="5" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/iv_image"
+            android:src="@drawable/img_default"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Send Email"
-            android:id="@+id/btn_send_email"/>
-        
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_load_local_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Load Image" />
+
+            <Button
+                android:id="@+id/btn_send_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Send Email" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
