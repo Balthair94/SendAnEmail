@@ -15,24 +15,10 @@
         android:padding="16dp">
 
         <EditText
-            android:id="@+id/et_from_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="From:"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/et_password_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password:"
-            android:inputType="textPassword" />
-
-        <EditText
             android:id="@+id/et_to_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="To:"
+            android:hint="To: (optional)"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -54,8 +40,7 @@
             android:layout_height="wrap_content"
             android:text="Send Email"
             android:id="@+id/btn_send_email"/>
-
-
+        
     </LinearLayout>
 
 </LinearLayout>
