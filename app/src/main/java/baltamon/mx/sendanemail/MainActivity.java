@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int CAMERA_REQUEST = 01;
     private static final int LOAD_IMAGE = 02;
 
     private MainActivityViewHolder viewHolder;
@@ -36,8 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (isOnline())
             sendEmail();
+        else
+            showToast("You are not online");
 
         loadLocalImage();
+        takePhoto();
     }
 
     public void setUpToolbar(){
@@ -52,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public boolean isValidEmail(){
+        if (!viewHolder.getEditTextTo().getText().toString().isEmpty() &&
+                !viewHolder.getEditTextSubject().getText().toString().isEmpty() &&
+                !viewHolder.getEditTextBody().getText().toString().isEmpty())
+            return true;
+        else
+            return false;
+    }
+
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -62,26 +75,39 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    public void takePhoto(){
+        viewHolder.getButtonTakePhoto().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+        });
+    }
+
     public void sendEmail(){
         viewHolder.getButtonSendEmail().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Send email", "");
-                String[] TO = {"galuz01@gmail.com"};
+                if (isValidEmail()){
+                    Log.i("Send email", "");
+                    String[] TO = {viewHolder.getEditTextTo().getText().toString()};
 
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                if (imageUri != null){
-                    intent.putExtra(Intent.EXTRA_STREAM, imageUri);
-                    intent.setType("image/*");
-                }
-                intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                intent.putExtra(Intent.EXTRA_EMAIL, TO);
-                intent.putExtra(Intent.EXTRA_SUBJECT, viewHolder.getEditTextSubject().getText().toString());
-                intent.putExtra(Intent.EXTRA_TEXT, viewHolder.getEditTextBody().getText().toString());
-                if (intent.resolveActivity(getPackageManager()) != null)
-                    startActivity(intent);
-                else
-                    showToast("No email provider detected");
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    if (imageUri != null){
+                        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                        intent.setType("image/*");
+                    }
+                    intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                    intent.putExtra(Intent.EXTRA_EMAIL, TO);
+                    intent.putExtra(Intent.EXTRA_SUBJECT, viewHolder.getEditTextSubject().getText().toString());
+                    intent.putExtra(Intent.EXTRA_TEXT, viewHolder.getEditTextBody().getText().toString());
+                    if (intent.resolveActivity(getPackageManager()) != null)
+                        startActivity(intent);
+                    else
+                        showToast("No email provider detected");
+                } else
+                    showToast("No valid fields");
             }
         });
     }
@@ -100,6 +126,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
+            case CAMERA_REQUEST:
+                if (resultCode == Activity.RESULT_OK){
+                    imageUri = data.getData();
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    viewHolder.getImageView().setImageBitmap(photo);
+                }
+                break;
+
             case LOAD_IMAGE:
                 if (resultCode == Activity.RESULT_OK){
                     imageUri = data.getData();

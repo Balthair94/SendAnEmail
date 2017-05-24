@@ -17,6 +17,7 @@ public class MainActivityViewHolder {
     private ImageView imageView;
 
     private Button buttonLoadLocalImage;
+    private Button buttonTakePhoto;
     private Button buttonSendEmail;
 
     public MainActivityViewHolder(View view){
@@ -25,6 +26,7 @@ public class MainActivityViewHolder {
         editTextBody = (EditText) view.findViewById(R.id.et_body_email);
         imageView = (ImageView) view.findViewById(R.id.iv_image);
         buttonLoadLocalImage = (Button) view.findViewById(R.id.btn_load_local_image);
+        buttonTakePhoto = (Button) view.findViewById(R.id.btn_take_photo);
         buttonSendEmail = (Button) view.findViewById(R.id.btn_send_email);
     }
 
@@ -34,6 +36,10 @@ public class MainActivityViewHolder {
 
     public Button getButtonLoadLocalImage() {
         return buttonLoadLocalImage;
+    }
+
+    public Button getButtonTakePhoto() {
+        return buttonTakePhoto;
     }
 
     public EditText getEditTextTo() {
